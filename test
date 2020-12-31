@@ -1,0 +1,28 @@
+from azureml.core import Workspace, Experiment
+from azureml.core import Workspace
+ws = Workspace.from_config()
+ws.write_config(path='.azureml')
+experiment_name = 'udacity_project_solution_real'
+exp = Experiment(workspace=ws, name=experiment_name)
+print('Workspace name: ' + ws.name, 
+      'Azure region: ' + ws.location,  
+      'Resource group: ' + ws.resource_group, sep = '\n')
+run = exp.start_logging()
+
+
+os.makedirs('./outputs', exist_ok=True)
+joblib.dump(value=model, './outputs/model.joblib')
+
+script_folder = './training'
+os.makedirs(script_folder, exist_ok=True)
+import shutil
+shutil.copy('./train.py', script_folder)
+est = SKLearn(
+    source_directory= script_folder,
+    compute_target=compute_target,
+    entry_script="train.py"
+)
+
+
+best_run = run.get_best_run_by_primary_metric()
+best_run.register_model(model_path='outputs/model.joblib', model_name='BankMarketingModel'
