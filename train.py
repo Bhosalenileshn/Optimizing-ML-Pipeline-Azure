@@ -14,12 +14,10 @@ from azureml.data.dataset_factory import TabularDatasetFactory
 # Data is located at:
 # "https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv"
 
-ds = TabularDatasetFactory.from_delimited_files("https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv", separator=',') ### YOUR CODE HERE ###
-
 
 ### YOUR CODE HERE ###a
 
-run = Run.get_context()
+
 
 def clean_data(data):
     # Dict for cleaning data
@@ -47,10 +45,9 @@ def clean_data(data):
 
     y_df = x_df.pop("y").apply(lambda s: 1 if s == "yes" else 0)
     
-x, y = clean_data(ds)
+    return x_df, y_df
+    
 
-# TODO: Split data into train and test sets.
-x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.30, random_state=10)
 
 def main():
     # Add arguments to script
@@ -60,14 +57,22 @@ def main():
     parser.add_argument('--max_iter', type=int, default=100, help="Maximum number of iterations to converge")
 
     args = parser.parse_args()
+    run = Run.get_context()
 
     run.log("Regularization Strength:", np.float(args.C))
     run.log("Max iterations:", np.int(args.max_iter))
+    hype_loc = "https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv"
+    ds = TabularDatasetFactory.from_delimited_files(path=hype_loc) 
+    x, y = clean_data(ds)
+    # TODO: Split data into train and test sets.
+    x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.30, random_state=10)
 
     model = LogisticRegression(C=args.C, max_iter=args.max_iter).fit(x_train, y_train)
 
     accuracy = model.score(x_test, y_test)
     run.log("Accuracy", np.float(accuracy))
+    os.makedirs('./outputs', exist_ok=True)
+    joblib.dump(value=model,filename='./outputs/model.joblib')
 
 if __name__ == '__main__':
     main()
