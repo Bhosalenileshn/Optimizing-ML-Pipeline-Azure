@@ -26,3 +26,20 @@ est = SKLearn(
 
 best_run = run.get_best_run_by_primary_metric()
 best_run.register_model(model_path='outputs/model.joblib', model_name='BankMarketingModel'
+
+Your data type is wrong for the Azure compute instance. if you pay extra attention on your exception here
+
+ConfigException: ConfigException:
+	Message: Input of type 'Unknown' is not supported. Supported types: [azureml.data.tabular_dataset.TabularDataset, azureml.pipeline.core.pipeline_output_dataset.PipelineOutputTabularDataset]
+You are actually passing a pandas dataframe to Azure compute instance, who actually expects a TabularDataset type. I changed the dataframe to TabularDataset and was able to run it without any issues. (I know it's a little weird that Azure compute instance is not telling you that you are passing a pandas dataframe to it, instead telling you the datatype is "unknown")
+
+The way to do this correctly is the following
+
+save your training data (pd dataframe) as a csv locally
+follow this step and upload your csv to Azure storage blob (https://stackoverflow.com/questions/60380154/upload-dataframe-as-dataset-in-azure-machine-learning)
+Use the TabularDataset object's from_delimited_files method to create a TabularDatasetDataset.Tabular.from_delimited_files(datastore.path('data/train.csv'))
+you can also reference this sample notebook here
+
+https://github.com/Azure/MachineLearningNotebooks/blob/master/how-to-use-azureml/automated-machine-learning/classification-credit-card-fraud/auto-ml-classification-credit-card-fraud.ipynb
+
+I'm certain this will help you. Let's do this!
