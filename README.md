@@ -3,7 +3,7 @@
 ## Overview
 This project is part of the Udacity Azure ML Nanodegree.
 In this project, we build and optimize an Azure ML pipeline using the Python SDK and a provided Scikit-learn model.
-This model is then compared to an Azure AutoML run.
+This model is then compared to an Azure AutoML run. 
 
 ## Summary
 **Problem statement:**  
@@ -29,7 +29,7 @@ Script contains a function named "clean_data" which cleans the data and one hot 
   
 Logistic Regression algorithm is used from the scikit learn.  
 
-***Tuning the Hyperparameters and training the model**    
+***Tuning the Hyperparameters and training the model***    
  If we tune the HyperParameters manually it will take log time. So, we used the Azure HyperDrive tool to find and tune the best Hyperparameters. We followed the below steps.  
    1.  Imported the required libraries.  
    2.  Used RandomParameterSampler as it is fast as compared to grid search and saves the budget to exhaustively search over the search space.  
@@ -46,7 +46,7 @@ Logistic Regression algorithm is used from the scikit learn.
 It uses multiple algorithms and finds the best algorithms for the provided task. AutoML used LightGBM, XGBoostClassifier,RandomForest etc. I did not use Voting Ensemble and stack ensemble.  
 So, provided false to these parameters in AutoMLconfig.  
 **Best model with the highest accuracy 0.915 is XGBoostClassifier with SparseNormalizer.**  
-[For More Details XGBoost](https://towardsdatascience.com/a-beginners-guide-to-xgboost-87f5d4c30ed7)  
+[For More Details on XGBoost](https://towardsdatascience.com/a-beginners-guide-to-xgboost-87f5d4c30ed7)  
 
 ## Pipeline comparison  
 
@@ -73,6 +73,6 @@ As a result, metrics are calculated with the average of the 3 validation metrics
 ## Future work
 We can use different primary metric to decide which is the best model. Also, we can consult to the person with the domain knowledge to decide which colums are irrelevant and which are relevant.
 We can also gather data from different banks and check whether the data is same and if different hot it is affecting the outcome.
-## Proof of cluster clean up
-**If you did not delete your compute cluster in the code, please complete this section. Otherwise, delete this section.**
-**Image of cluster marked for deletion**
+## Proof of cluster clean up  
+**Image of cluster marked for deletion**  
+![alt text](https://github.com/Bhosalenileshn/Optimizing-ML-Pipeline-Azure/blob/main/deleting%20_cluster.png)  
